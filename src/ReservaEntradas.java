@@ -1,38 +1,22 @@
+import java.util.Random;
+
 public class ReservaEntradas {
     public static void main() throws InterruptedException {
+
         Evento evento = new Evento();
+        Random random = new Random();
 
-        Thread hiloAna = new Thread(()->{
-            if(evento.reservar(7)){
-                System.out.println("[Ana]Se han reservado 7 entradas para Ana y quedan " + evento.entradasDisponibles + " entradas disponibles");
-            }else{
-                System.out.println("No quedan reservas suficientes");
-            }
-        }, "Ana");
+        String[] nombres = {"Juan", "Maria", "Gonzalo", "Carlos", "Pepo", "Sebastian","Antonio","Abigail","Lia","Janire"};
+        Thread[] hilos = new Thread[10];
 
-        Thread hiloLea = new Thread(()->{
-            if(evento.reservar(6)){
-                System.out.println("[Lea]Se han reservado 6 entradas para Lea y quedan " + evento.entradasDisponibles + " entradas disponibles");
-            }else{
-                System.out.println("No quedan reservas suficientes");
-            }
-        }, "Lea");
+        for (int i = 0; i < nombres.length; i++) {
+            Cliente cliente = new Cliente(nombres[i], random.nextInt(1, 3), evento);
+            Thread hilo = new Thread(cliente);
+            hilos[i] = hilo;
+            hilo.start();
+        }
 
-        Thread hiloMarcos = new Thread(()->{
-            if(evento.reservar(5)){
-                System.out.println("[Marcos]Se han reservado 5 entradas para Marcos y quedan " + evento.entradasDisponibles + " entradas disponibles");
-            }else{
-                System.out.println("No quedan reservas suficientes");
-            }
-        }, "Marcos");
 
-        hiloMarcos.start();
-        hiloLea.start();
-        hiloAna.start();
-
-        hiloMarcos.join();
-        hiloLea.join();
-        hiloAna.join();
 
     }
 }
